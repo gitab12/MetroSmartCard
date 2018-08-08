@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+
+        }
+        
+       
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection("Data Source=.\\SQLEXPRESS;AttachDbFilename=C:\\Users\\student\\Documents\\Student.mdf;Integrated Security=True;Connect Timeout=30;User Instance=True");
+                cn.Open();
+                String sqlst = "delete from Stud where courseid=" + textBox1.Text;
+                SqlCommand cmd = new SqlCommand(sqlst, cn);
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("record deleted");
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("cannt open connection" + ex.ToString());
+            }
+
+
+
+
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        { 
+            int i;
+            try
+            {
+                String str = "Data Source=.\\SQLEXPRESS;AttachDbFilename=C:\\Users\\student\\Documents\\Student.mdf;Integrated Security=True;Connect Timeout=30;User Instance=True";
+                using (SqlConnection con = new SqlConnection(str))
+                {
+                    using (SqlCommand cmd = new SqlCommand("Select * from Stud",con))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                        {
+                            using(DataTable dt= new DataTable())
+                            {
+                                sda.Fill(dt);
+                                i=dt.Rows.Count;
+                                textBox1.Text=i.ToString();
+                                dataGridView1.DataSource=dt;
+                            }
+                        }
+            }
+        
+        
+        }
+       }
+
+              
+            catch(Exception ex)
+            {
+                MessageBox.Show("camnnt open connection!"+ex.ToString());
+
+            
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+                
+        }
+    }
+}
+
